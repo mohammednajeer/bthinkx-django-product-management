@@ -45,3 +45,13 @@ products/
 manage.py
 README.md
 requirements.txt
+
+## Login Credentials
+
+Username: `bthinkx_admin`
+
+Password: `BthinkxTest@2026`
+
+Login URL:
+
+`http://127.0.0.1:8000/login/`
