@@ -2,6 +2,16 @@
 
 A simple e-commerce product management system built as part of the Junior Python/Django Developer Development Test.
 
+## Login Credentials
+
+Username: `admin`
+
+Password: `admin`
+
+Login URL:
+
+`http://127.0.0.1:8000/login/`
+
 ## Technologies Used
 
 - Python
@@ -45,13 +55,3 @@ products/
 manage.py
 README.md
 requirements.txt
-
-## Login Credentials
-
-Username: `bthinkx_admin`
-
-Password: `BthinkxTest@2026`
-
-Login URL:
-
-`http://127.0.0.1:8000/login/`
