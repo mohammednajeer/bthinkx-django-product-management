@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from .forms import ProductForm
 from .models import Product, Category
-
+from django.shortcuts import render, redirect, get_object_or_404
 
 @login_required
 def dashboard(request):
@@ -77,4 +77,31 @@ def product_create(request):
         request,
         'products/product_form.html',
         {'form': form}
+    )
+
+@login_required
+def product_edit(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        form = ProductForm(
+            request.POST,
+            request.FILES,
+            instance=product
+        )
+
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+
+    else:
+        form = ProductForm(instance=product)
+
+    return render(
+        request,
+        'products/product_form.html',
+        {
+            'form': form,
+            'product': product,
+        }
     )
