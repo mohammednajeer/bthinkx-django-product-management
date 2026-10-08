@@ -21,8 +21,10 @@
         </a>
 
         <div>
-            <a class="btn btn-outline-light btn-sm"
-               href="{% url 'dashboard' %}">
+            <a
+                class="btn btn-outline-light btn-sm"
+                href="{% url 'dashboard' %}"
+            >
                 Dashboard
             </a>
         </div>
@@ -32,8 +34,10 @@
 <div class="container py-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
             <h1>Products</h1>
+
             <p class="text-muted">
                 Manage your products
             </p>
@@ -42,37 +46,85 @@
         <a href="#" class="btn btn-primary">
             Add Product
         </a>
+
     </div>
 
 
     <div class="card shadow-sm">
 
         <div class="card-body">
+
+           
             <form method="get" class="row g-2 mb-4">
 
-    <div class="col-md-8">
-        <input
-            type="text"
-            name="search"
-            class="form-control"
-            placeholder="Search by product name"
-            value="{{ request.GET.search }}"
-        >
-    </div>
+                <div class="col-md-5">
+                    <input
+                        type="text"
+                        name="search"
+                        class="form-control"
+                        placeholder="Search by product name"
+                        value="{{ request.GET.search }}"
+                    >
+                </div>
 
-    <div class="col-md-4">
-        <button type="submit" class="btn btn-primary">
-            Search
-        </button>
-    </div>
+                <div class="col-md-3">
+                    <select name="category" class="form-select">
 
-</form>
+                        <option value="">All Categories</option>
 
+                        {% for category in categories %}
+                            <option
+                                value="{{ category.id }}"
+                                {% if request.GET.category == category.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}
+                            >
+                                {{ category.name }}
+                            </option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <select name="status" class="form-select">
+
+                        <option value="">All Status</option>
+
+                        <option value="active"
+                            {% if request.GET.status == 'active' %}
+                                selected
+                            {% endif %}
+                        >
+                            Active
+                        </option>
+
+                        <option value="inactive"
+                            {% if request.GET.status == 'inactive' %}
+                                selected
+                            {% endif %}
+                        >
+                            Inactive
+                        </option>
+
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">
+                        Filter
+                    </button>
+                </div>
+
+            </form>
+
+            
             <div class="table-responsive">
 
                 <table class="table table-hover align-middle">
 
                     <thead>
+
                         <tr>
                             <th>Product</th>
                             <th>Category</th>
@@ -81,7 +133,9 @@
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
+
                     </thead>
+
 
                     <tbody>
 
@@ -93,52 +147,80 @@
                                 {{ product.name }}
                             </td>
 
+
                             <td>
                                 {{ product.category.name }}
                             </td>
+
 
                             <td>
                                 ₹{{ product.price }}
                             </td>
 
+
                             <td>
                                 {{ product.stock }}
                             </td>
 
+
                             <td>
+
                                 {% if product.status == 'active' %}
+
                                     <span class="badge bg-success">
                                         Active
                                     </span>
+
                                 {% else %}
+
                                     <span class="badge bg-secondary">
                                         Inactive
                                     </span>
+
                                 {% endif %}
+
                             </td>
 
+
                             <td>
-                                <a href="#" class="btn btn-sm btn-outline-primary">
+
+                                <a
+                                    href="#"
+                                    class="btn btn-sm btn-outline-primary"
+                                >
                                     View
                                 </a>
 
-                                <a href="#" class="btn btn-sm btn-outline-warning">
+                                <a
+                                    href="#"
+                                    class="btn btn-sm btn-outline-warning"
+                                >
                                     Edit
                                 </a>
 
-                                <a href="#" class="btn btn-sm btn-outline-danger">
+                                <a
+                                    href="#"
+                                    class="btn btn-sm btn-outline-danger"
+                                >
                                     Delete
                                 </a>
+
                             </td>
 
                         </tr>
 
+
                         {% empty %}
 
                         <tr>
-                            <td colspan="6" class="text-center py-4">
+
+                            <td
+                                colspan="6"
+                                class="text-center py-4"
+                            >
                                 No products found.
                             </td>
+
                         </tr>
 
                         {% endfor %}
@@ -148,6 +230,67 @@
                 </table>
 
             </div>
+                        
+            {% if products.has_other_pages %}
+
+            <nav aria-label="Product pagination">
+
+                <ul class="pagination justify-content-center">
+
+                    {% if products.has_previous %}
+                        <li class="page-item">
+                            <a
+                                class="page-link"
+                                href="?page={{ products.previous_page_number }}&search={{ request.GET.search }}&category={{ request.GET.category }}&status={{ request.GET.status }}"
+                            >
+                                Previous
+                            </a>
+                        </li>
+                    {% endif %}
+
+
+                    {% for num in products.paginator.page_range %}
+
+                        {% if products.number == num %}
+
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    {{ num }}
+                                </span>
+                            </li>
+
+                        {% else %}
+
+                            <li class="page-item">
+                                <a
+                                    class="page-link"
+                                    href="?page={{ num }}&search={{ request.GET.search }}&category={{ request.GET.category }}&status={{ request.GET.status }}"
+                                >
+                                    {{ num }}
+                                </a>
+                            </li>
+
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    {% if products.has_next %}
+                        <li class="page-item">
+                            <a
+                                class="page-link"
+                                href="?page={{ products.next_page_number }}&search={{ request.GET.search }}&category={{ request.GET.category }}&status={{ request.GET.status }}"
+                            >
+                                Next
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+
+            </nav>
+
+            {% endif %}
 
         </div>
 

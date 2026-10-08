@@ -30,24 +30,32 @@ def dashboard(request):
 
     return render(request, 'products/dashboard.html', context)
 
+
 @login_required
 def product_list(request):
-    products = Product.objects.all().order_by('-created_at')
-    categories = Category.objects.all()
     search = request.GET.get('search', '')
-    paginator = Paginator(products, 10)
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
+    category_id = request.GET.get('category', '')
+    status = request.GET.get('status', '')
+    products = Product.objects.all()
 
     if search:
         products = products.filter(name__icontains=search)
 
+    if category_id:
+        products = products.filter(category_id=category_id)
+
+    if status:
+        products = products.filter(status=status)
+
+    products = products.order_by('-created_at')
+    categories = Category.objects.all()
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'products': page_obj,
         'categories': categories,
-        'search': search,
     }
 
     return render(request, 'products/product_list.html', context)
