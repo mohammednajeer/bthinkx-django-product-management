@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-
+from .forms import ProductForm
 from .models import Product, Category
 
 
@@ -59,3 +59,22 @@ def product_list(request):
     }
 
     return render(request, 'products/product_list.html', context)
+
+@login_required
+def product_create(request):
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return redirect('product_list')
+
+    else:
+        form = ProductForm()
+
+    return render(
+        request,
+        'products/product_form.html',
+        {'form': form}
+    )
