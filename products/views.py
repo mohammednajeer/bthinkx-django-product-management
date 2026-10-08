@@ -105,3 +105,28 @@ def product_edit(request, pk):
             'product': product,
         }
     )
+
+
+@login_required
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    return render(
+        request,
+        'products/product_detail.html',
+        {'product': product}
+    )
+
+@login_required
+def product_delete(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+
+    if request.method == 'POST':
+        product.delete()
+        return redirect('product_list')
+
+    return render(
+        request,
+        'products/product_confirm_delete.html',
+        {'product': product}
+    )
