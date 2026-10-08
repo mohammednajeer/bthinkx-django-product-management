@@ -25,15 +25,18 @@
                 Dashboard
             </a>
 
-            {% comment %} <a class="nav-link" href="{% url 'product_list' %}">
+            <a class="nav-link" href="{% url 'product_list' %}">
                 Products
             </a>
 
             <a class="nav-link" href="{% url 'product_create' %}">
                 Add Product
-            </a> {% endcomment %}
+            </a>
 
-            <a class="nav-link" href="{% url 'logout' %}">
+            <a
+                href="{% url 'logout' %}"
+                class="btn btn-outline-danger"
+            >
                 Logout
             </a>
         </div>

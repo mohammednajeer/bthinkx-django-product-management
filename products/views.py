@@ -4,6 +4,8 @@ from django.core.paginator import Paginator
 from .forms import ProductForm
 from .models import Product, Category
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import logout
+
 
 @login_required
 def dashboard(request):
@@ -130,3 +132,7 @@ def product_delete(request, pk):
         'products/product_confirm_delete.html',
         {'product': product}
     )
+
+def user_logout(request):
+    logout(request)
+    return redirect('login')
